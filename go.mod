@@ -1,4 +1,4 @@
-module github.com/meyermarcel/annot
+module github.com/mrclmr/annot
 
 go 1.23
 

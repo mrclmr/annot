@@ -3,7 +3,7 @@ package annot_test
 import (
 	"fmt"
 
-	"github.com/meyermarcel/annot"
+	"github.com/mrclmr/annot"
 )
 
 func Example() {

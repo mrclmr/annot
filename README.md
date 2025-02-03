@@ -1,4 +1,4 @@
-[![build](https://github.com/meyermarcel/annot/actions/workflows/build.yml/badge.svg)](https://github.com/meyermarcel/annot/actions/workflows/build.yml) [![Go Report Card](https://goreportcard.com/badge/github.com/meyermarcel/annot)](https://goreportcard.com/report/github.com/meyermarcel/annot)
+[![build](https://github.com/mrclmr/annot/actions/workflows/build.yml/badge.svg)](https://github.com/mrclmr/annot/actions/workflows/build.yml) [![Go Report Card](https://goreportcard.com/badge/github.com/mrclmr/annot)](https://goreportcard.com/report/github.com/mrclmr/annot)
 
 # Annot
 
@@ -18,7 +18,7 @@ The greatest enemy of knowledge is not ignorance, it is the illusion of knowledg
 ## Installation
 
 ```
-go get github.com/meyermarcel/annot
+go get github.com/mrclmr/annot
 ```
 
 ## Example
@@ -29,7 +29,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/meyermarcel/annot"
+	"github.com/mrclmr/annot"
 )
 
 func main() {
