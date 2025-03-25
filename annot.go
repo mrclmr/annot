@@ -1,3 +1,4 @@
+// Package annot annotates a string line leading to a description.
 package annot
 
 import (

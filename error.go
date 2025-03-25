@@ -4,6 +4,7 @@ import (
 	"fmt"
 )
 
+// OverlapError occurs if Annot.Col of two annotations overlap.
 type OverlapError struct {
 	colEnd, firstAnnotPos, secondAnnotCol int
 }
@@ -17,6 +18,7 @@ func (e *OverlapError) Error() string {
 		e.colEnd, e.firstAnnotPos, e.secondAnnotCol, e.firstAnnotPos+1)
 }
 
+// ColExceedsColEndError occurs if the Annot.Col is equal or higher than Annot.ColEnd.
 type ColExceedsColEndError struct {
 	annotPos, col, colEnd int
 }
