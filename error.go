@@ -1,7 +1,6 @@
 package annot
 
 import (
-	"errors"
 	"fmt"
 )
 
@@ -18,11 +17,6 @@ func (e *OverlapError) Error() string {
 		e.colEnd, e.firstAnnotPos, e.secondAnnotCol, e.firstAnnotPos+1)
 }
 
-func (e *OverlapError) Is(target error) bool {
-	var overlapError *OverlapError
-	return errors.As(target, &overlapError)
-}
-
 type ColExceedsColEndError struct {
 	annotPos, col, colEnd int
 }
@@ -34,9 +28,4 @@ func newColExceedsColEndError(annotPos, col, colEnd int) *ColExceedsColEndError 
 func (e *ColExceedsColEndError) Error() string {
 	return fmt.Sprintf("annot: in %d. annotation Col %d needs to be lower than ColEnd %d",
 		e.annotPos, e.col, e.colEnd)
-}
-
-func (e *ColExceedsColEndError) Is(target error) bool {
-	var overlapError *ColExceedsColEndError
-	return errors.As(target, &overlapError)
 }

@@ -3,15 +3,15 @@ package annot
 import (
 	"bytes"
 	"errors"
+	"io"
 	"testing"
 )
 
 func TestWrite(t *testing.T) {
 	tests := []struct {
-		name    string
-		annots  []*Annot
-		wantW   string
-		wantErr error
+		name   string
+		annots []*Annot
+		wantW  string
 	}{
 		{
 			name: "utilise every space to the limit",
@@ -375,36 +375,6 @@ func TestWrite(t *testing.T) {
 `,
 		},
 		{
-			name: "overlapping annotation",
-			annots: []*Annot{
-				{Col: 0, ColEnd: 1},
-				{Col: 1, ColEnd: 2},
-			},
-			wantErr: &OverlapError{},
-		},
-		{
-			name: "col is equal to col end",
-			annots: []*Annot{
-				{Col: 1, ColEnd: 1},
-			},
-			wantErr: &ColExceedsColEndError{},
-		},
-		{
-			name: "col is higher than col end",
-			annots: []*Annot{
-				{Col: 2, ColEnd: 1},
-			},
-			wantErr: &ColExceedsColEndError{},
-		},
-		{
-			name: "col exceeds col end error occurs before overlapping error",
-			annots: []*Annot{
-				{Col: 1, ColEnd: 1},
-				{Col: 1, ColEnd: 2},
-			},
-			wantErr: &ColExceedsColEndError{},
-		},
-		{
 			name: "remove second annotation with same column position",
 			annots: []*Annot{
 				{Col: 0, Lines: []string{"line1"}},
@@ -420,15 +390,60 @@ func TestWrite(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			w := &bytes.Buffer{}
 			err := Write(w, tt.annots...)
-			if tt.wantErr != nil {
-				if !errors.Is(tt.wantErr, err) {
-					t.Errorf("Write() error = %v, wantErr %v", err, tt.wantErr)
-				}
-				return
+			if err != nil {
+				t.Fatalf("want no error, got %v", err)
 			}
 			if gotW := "\n" + w.String(); gotW != tt.wantW {
 				t.Errorf("Write() gotW = %v, want %v", gotW, tt.wantW)
 			}
 		})
+	}
+}
+
+func TestColExceedsColEndError(t *testing.T) {
+	tests := []struct {
+		name   string
+		annots []*Annot
+	}{
+		{
+			name: "col is equal to col end",
+			annots: []*Annot{
+				{Col: 1, ColEnd: 1},
+			},
+		},
+		{
+			name: "col is higher than col end",
+			annots: []*Annot{
+				{Col: 2, ColEnd: 1},
+			},
+		},
+		{
+			name: "col exceeds col end error occurs before overlapping error",
+			annots: []*Annot{
+				{Col: 1, ColEnd: 1},
+				{Col: 1, ColEnd: 2},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := Write(io.Discard, tt.annots...)
+			var colExceedsColEndError *ColExceedsColEndError
+			if !errors.As(err, &colExceedsColEndError) {
+				t.Fatalf("Got error = %v, want ColExceedsColEndError", err)
+			}
+		})
+	}
+}
+
+func TestOverlapError(t *testing.T) {
+	err := Write(io.Discard, []*Annot{
+		{Col: 0, ColEnd: 1},
+		{Col: 1, ColEnd: 2},
+	}...)
+
+	var overlapError *OverlapError
+	if !errors.As(err, &overlapError) {
+		t.Fatalf("Got error = %v, want OverlapError", err)
 	}
 }
