@@ -193,7 +193,7 @@ func setSpace(rowBefore int, a *Annot, rightAnnots []*Annot) {
 }
 
 func checkLinesAndSetSpaces(row int, a *Annot, rightAnnots []*Annot) bool {
-	for aLineIdx := 0; aLineIdx < len(a.lines); aLineIdx++ {
+	for aLineIdx := range a.lines {
 		lineFits := checkLineAndSetSpace(row, aLineIdx, a, rightAnnots)
 		if !lineFits {
 			return false
@@ -282,7 +282,7 @@ func write(writer io.Writer, annots []*Annot) error {
 	}
 	b.Reset()
 
-	for row := 0; row < rowCount; row++ {
+	for row := range rowCount {
 		for _, a := range annots {
 			switch {
 			case row < a.row:
