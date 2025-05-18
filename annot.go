@@ -131,11 +131,10 @@ func Write(w io.Writer, annots ...*Annot) error {
 		a.createLines()
 	}
 
-	// Start with second last annotation index and decrement.
-	// The last annotation will always be on row=0 and needs
-	// no adjustment.
-	for aIdxDecr := len(annots) - 2; 0 <= aIdxDecr; aIdxDecr-- {
-		setRow(annots[aIdxDecr], annots[aIdxDecr+1:])
+	// Start with second last annotation index. The last annotation
+	// will always be on row=0 and needs no adjustment.
+	for aIdx := range slices.Backward(annots[:len(annots)-1]) {
+		setRow(annots[aIdx], annots[aIdx+1:])
 	}
 
 	return write(w, annots)
