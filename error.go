@@ -31,3 +31,18 @@ func (e *ColExceedsColEndError) Error() string {
 	return fmt.Sprintf("annot: in %d. annotation Col %d needs to be lower than ColEnd %d",
 		e.annotPos, e.col, e.colEnd)
 }
+
+// ColExceedsWidthError occurs if the Annot.Col or Annot.ColEnd is equal or
+// higher than Renderer.Width.
+type ColExceedsWidthError struct {
+	annotPos, col, width int
+}
+
+func newColExceedsWidthError(annotPos, col, width int) *ColExceedsWidthError {
+	return &ColExceedsWidthError{annotPos, col, width}
+}
+
+func (e *ColExceedsWidthError) Error() string {
+	return fmt.Sprintf("annot: in %d. annotation column %d needs to be lower than width %d",
+		e.annotPos, e.col, e.width)
+}
