@@ -428,8 +428,7 @@ func TestColExceedsColEndError(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			err := Write(io.Discard, tt.annots...)
-			var colExceedsColEndError *ColExceedsColEndError
-			if !errors.As(err, &colExceedsColEndError) {
+			if _, ok := errors.AsType[*ColExceedsColEndError](err); !ok {
 				t.Fatalf("Got error = %v, want ColExceedsColEndError", err)
 			}
 		})
@@ -442,8 +441,7 @@ func TestOverlapError(t *testing.T) {
 		{Col: 1, ColEnd: 2},
 	}...)
 
-	var overlapError *OverlapError
-	if !errors.As(err, &overlapError) {
+	if _, ok := errors.AsType[*OverlapError](err); !ok {
 		t.Fatalf("Got error = %v, want OverlapError", err)
 	}
 }
